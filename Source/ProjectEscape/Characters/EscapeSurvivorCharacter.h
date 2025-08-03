@@ -90,7 +90,13 @@ private:
 	USpringArmComponent* CameraBoom;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* FollowCamera;
+	UCameraComponent* ThirdPersonCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FirstPersonCamera;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera", meta = (AllowPrivateAccess = "true"))
+	FName FirstPersonCameraSocketName = "FirstPersonCameraSocket";
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Combat", meta = (AllowPrivateAccess = "true"))
 	USurvivorCombatComponent* SurvivorCombatComponent;
@@ -109,7 +115,8 @@ private:
 	void Input_Look(const FInputActionValue& InputActionValue);
 	void Input_Jump(const FInputActionValue& InputActionValue);
 	void Input_Jump_End(const FInputActionValue& InputActionValue);
-
+	void InputTag_SwitchCameraMode(const FInputActionValue& InputActionValue);
+	
 	void Input_AbilityInputPressed(FGameplayTag InInputTag);
 	void Input_AbilityInputRelease(FGameplayTag InInputTag);
 

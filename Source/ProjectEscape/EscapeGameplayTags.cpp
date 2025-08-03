@@ -18,6 +18,7 @@ namespace EscapeGameplayTags
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_FireWeapon, "InputTag.FireWeapon");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_ReloadWeapon, "InputTag.ReloadWeapon");
 	UE_DEFINE_GAMEPLAY_TAG(InputTag_UseGrenade, "InputTag.UseGrenade");
+	UE_DEFINE_GAMEPLAY_TAG(InputTag_SwitchCameraMode, "InputTag.SwitchCameraMode");
 
 	/* Ability Tags */
 	UE_DEFINE_GAMEPLAY_TAG(Player_Ability_Equip_Weapon, "Player.Ability.Equip.Weapon");

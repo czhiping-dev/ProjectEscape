@@ -43,9 +43,14 @@ AEscapeSurvivorCharacter::AEscapeSurvivorCharacter():
 	CameraBoom->SocketOffset = FVector(0.f, 55.f, 65.f);
 	CameraBoom->bUsePawnControlRotation = true;
 
-	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
-	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
-	FollowCamera->bUsePawnControlRotation = false;
+	ThirdPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("ThirdPersonCamera"));
+	ThirdPersonCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
+	ThirdPersonCamera->bUsePawnControlRotation = false;
+
+	FirstPersonCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCamera->SetupAttachment(GetMesh(), FirstPersonCameraSocketName);
+	FirstPersonCamera->bUsePawnControlRotation = true;
+	FirstPersonCamera->bAutoActivate = false;
 
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.f, 500.f, 0.f);
@@ -120,6 +125,7 @@ void AEscapeSurvivorCharacter::SetupPlayerInputComponent(UInputComponent* Player
 	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_Move, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_Look, ETriggerEvent::Triggered, this, &ThisClass::Input_Look);
 	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_Jump, ETriggerEvent::Triggered, this, &ThisClass::Input_Jump);
+	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_SwitchCameraMode, ETriggerEvent::Triggered, this, &ThisClass::InputTag_SwitchCameraMode);
 	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_Jump, ETriggerEvent::Completed, this, &ThisClass::Input_Jump_End);
 
 	EscapeInputComponent->BindNativeInputAction(InputConfigDataAsset, EscapeGameplayTags::InputTag_FireWeapon, ETriggerEvent::Triggered, this, &ThisClass::ServerFireWeapon);
@@ -174,6 +180,24 @@ void AEscapeSurvivorCharacter::Input_Jump(const FInputActionValue& InputActionVa
 void AEscapeSurvivorCharacter::Input_Jump_End(const FInputActionValue& InputActionValue)
 {
 	StopJumping();
+}
+
+void AEscapeSurvivorCharacter::InputTag_SwitchCameraMode(const FInputActionValue& InputActionValue)
+{
+	if (ThirdPersonCamera->IsActive())
+	{
+		FirstPersonCamera->SetActive(true);
+		ThirdPersonCamera->SetActive(false);
+
+		GetMesh()->HideBoneByName(FName("head"), EPhysBodyOp::PBO_None);
+	}
+	else
+	{
+		FirstPersonCamera->SetActive(false);
+		ThirdPersonCamera->SetActive(true);
+
+		GetMesh()->UnHideBoneByName(FName("head"));
+	}
 }
 
 void AEscapeSurvivorCharacter::Input_AbilityInputPressed(FGameplayTag InInputTag)

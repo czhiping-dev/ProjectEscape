@@ -69,6 +69,8 @@ void AEscapeSurvivorController::ClientRemoveMappingContext_Implementation(UInput
 				if (EnhancedInputLocalPlayerSubsystem)
 				{
 					EnhancedInputLocalPlayerSubsystem->RemoveMappingContext(MappingContext);
+
+					LocalPlayer->ConsoleCommand(TEXT("showdebug abilitysystem"), true);
 				}
 			}
 		}
