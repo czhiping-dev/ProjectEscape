@@ -9,8 +9,6 @@
 #include "Interfaces/PawnUIInterface.h"
 #include "Components/UI/PawnUIComponent.h"
 
-#include "EscapeDebugHelper.h"
-
 UEscapeAttributeSet::UEscapeAttributeSet()
 {
 	InitCurrentHealth(1.f);
@@ -53,9 +51,6 @@ void UEscapeAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCall
 		const float NewCurrentHealth = FMath::Clamp(OldHealth - DamageDone, 0.f, GetMaxHealth());
 		SetCurrentHealth(NewCurrentHealth);
 		PawnUIComponent->OnCurrentHealthChanged.Broadcast(GetCurrentHealth() / GetMaxHealth());
-		
-		const FString DebugString = FString::Printf(TEXT("Actor: %s Old Health: %f, Damage Done: %f, NewCurrentHealth: %f, Causing by :%"), *GetOwningActor()->GetName(), OldHealth, DamageDone, NewCurrentHealth, *Data.EffectSpec.GetContext().GetInstigator()->GetName());
-		//Debug::Print(DebugString, FColor::Green);
 	}
 
 #pragma endregion
